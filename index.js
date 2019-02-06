@@ -59,7 +59,7 @@ app.post('/api/persons/', validatePost, (req, res) => {
   const newPerson = {
     name,
     number,
-    newId
+    id: newId
   }
   persons = [...persons, newPerson]
   res.status(200).json(newPerson)
