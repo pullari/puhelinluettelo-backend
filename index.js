@@ -12,9 +12,7 @@ app.use(cors())
 morgan.token('body', function (req, res) { if(req.method === 'POST') return "body " + JSON.stringify(req.body) })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-app.get('/', (req, res) => {
-  res.send('<h1>Hello World</h1>')
-})
+app.use(express.static('./build'))
 
 app.get('/info', (req, res) => {
   res.send(
