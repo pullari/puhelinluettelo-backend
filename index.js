@@ -67,23 +67,24 @@ const validatePost = (req, res, next) => {
   next()
 }
 
-app.post('/api/persons/', (req, res) => {
+app.post('/api/persons/', (req, res, next) => {
   const { name, number } = req.body;
-
-  if(!name || !number) return res.status(400).json({ error: 'Name or number missing' })
 
   new Person({ name, number })
     .save()
     .then((savedPerson) => res.status(200).json(savedPerson))
+    .catch(err => next(err))
 })
 
 const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
+  console.error(error)
 
   if (error.name === 'CastError' && error.kind == 'ObjectId') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
-
+  } else if (error.name === 'ValidationError') {    
+    return response.status(400).json({ error: error.message })  
+  }
+  
   next(error)
 }
 
